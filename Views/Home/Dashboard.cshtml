@@ -1,0 +1,68 @@
+﻿@model TransactionViewModel
+
+<h1>Welcome!</h1>
+
+<div class="container">
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Email</th>
+        <th>Balance</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>@ViewBag.currentUser.FirstName</td>
+        <td>@ViewBag.currentUser.LastName</td>
+        <td>@ViewBag.currentUser.Email</td>
+        <td>@ViewBag.currentUser.Balance</td>
+        <td>@ViewBag.currentUser.created_at</td>
+      </tr>
+    </tbody>
+  </table>
+  @{
+        if(TempData["Overdraft"] != null){
+                <small id="nameHelp" class="error-message form-text text-muted">@TempData["Overdraft"]</small>
+        }
+    }
+  <form asp-action="Process" asp-controller="Home" method="post">
+      <div class="form-group">
+          <label asp-for="Amount"></label><br>
+          <span asp-validation-for="Amount"></span>
+          <input asp-for="Amount" class="form-control">
+      </div>
+  
+      <input value="Save" type="submit">
+  </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Transaction Type</th>
+        <th>Amount</th>
+        <th>Balance</th>
+        <th>Submitted</th>
+      </tr>
+    </thead>
+    <tbody>
+      @{
+        foreach(var transaction in ViewBag.userTransactions)
+        {
+          <tr>
+              <td>@transaction.TransactionId</td>
+              <td>@transaction.TransactionType</td>
+              <td>@transaction.Amount</td>
+              <td>@transaction.CurrentBalance</td>
+              <td>@transaction.created_at</td>
+          </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>
+<a href="/logout">Logout</a>
